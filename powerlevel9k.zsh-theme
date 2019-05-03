@@ -1605,7 +1605,13 @@ prompt_vcs() {
         current_state='clean'
       fi
     fi
-    "$1_prompt_segment" "${0}_${(U)current_state}" "$2" "${vcs_states[$current_state]}" "$DEFAULT_COLOR" "$vcs_prompt" "$vcs_visual_identifier"
+    # If we are on blacklist origin, do not show branch
+    local origin_url=${$(git remote get-url origin)}
+    if [[ "$origin_url" == "$POWERLEVEL9K_VCS_IGNORE_DIR" ]]; then
+      return
+    else
+      "$1_prompt_segment" "${0}_${(U)current_state}" "$2" "${vcs_states[$current_state]}" "$DEFAULT_COLOR" "$vcs_prompt" "$vcs_visual_identifier"
+    fi
   fi
 }
 
